@@ -1,0 +1,48 @@
+module.exports = [{
+    id:2,
+    pid:0,
+    path:"/course",
+    name:'Course',
+    title:"代码管理"
+},{
+    id:3,
+    pid:2,
+    link:'/course/operate',
+    path:"/course",
+    name:'CourseOperate',
+    title:"防抖和节流"
+},{
+    id:4,
+    pid:3,
+    path:"/info_data",
+    link:"/course/operate/info_data",
+    name:'CourseInfoData',
+    title:"数组扁平化"
+},{
+    id:5,
+    pid:2,
+    path:"/add",
+    link:"/course/add",
+    name:'CourseAdd',
+    title:"增加课程"
+},{
+    id:6,
+    pid:0,
+    path:"/student",
+    name:'Student',
+    title:"学生管理"
+},{
+    id:7,
+    pid:6,
+    link:'/student/operate',
+    path:"student",
+    name:'StudentOperate',
+    title:"学生操作"
+},{
+    id:8,
+    pid:6,
+    link:'/student/add',
+    path:"add",
+    name:'StudentAdd',
+    title:"增加学生"
+}]
