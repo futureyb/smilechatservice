@@ -22,7 +22,6 @@ const jwtCheck = (req, res, next) => {
       })
       return
     } else {
-        console.log("token是",data)
       req.jwtInfo = data
       next()
     }
@@ -36,6 +35,7 @@ const jwtCheckUtil = async (token)=>{
           console.log('token失效了')
           return
         } else {
+            console.log("token111111",data)
             return data
         }
       })

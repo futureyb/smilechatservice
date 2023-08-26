@@ -64,10 +64,12 @@ exports.getUserFriends = async (id, friend_id) => {
 
     //获取与好友的未读条数
     const updatedFriendsList = await Promise.all(
+        
         friends.map(async friend => {
+            console.log("好友id",friend.id)
             const unreadMessageCount = await db.chatmassage.count({
                 where: {
-                    friendId: friend.id,
+                    userId: friend.id,
                     message_state: 0
                 }
             });
@@ -81,7 +83,8 @@ exports.getUserFriends = async (id, friend_id) => {
     );
 
 
-
+    console.log("好友", updatedFriendsList)
+    // console.log("好友111", friends)
 
     return {
         code: 200,
@@ -143,28 +146,12 @@ exports.createChatMassAge = async (id, friendId, message, type) => {
 
 exports.readChatMassage = async (id, friendId) => {
     friendId = Number(friendId)
-    console.log(id, friendId)
     let readMassage = await db.Chatmassage.updateMany({
-        where: { userId: id ,friendId},
+        where: { userId: friendId, friendId:id },
         data: { message_state: 1 }
     })
     return {
         code: 200,
         data: readMassage
     }
-    // const newMessage = await db.Chatmassage.create({
-    //     data: {
-    //         userId: id,
-    //         friendId: friendId,
-    //         message,
-    //         type,
-    //         createAt: new Date(),
-    //         message_state: 0,
-    //         ConversationId: 1
-    //     }
-    // })
-    // return {
-    //     code: 200,
-    //     data: newMessage
-    // }
 }
