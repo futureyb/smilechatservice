@@ -58,7 +58,7 @@ exports.getUserFriends = async (id, friend_id) => {
     const friendIds = user_relation.map(item => item.friendId)
     const friends = await db.userinfo.findMany({
         where: { id: { in: friendIds } },
-        
+
     })
 
 
@@ -79,9 +79,8 @@ exports.getUserFriends = async (id, friend_id) => {
             };
         })
     );
-    
 
-    console.log("111", updatedFriendsList)
+
 
 
     return {
@@ -140,4 +139,32 @@ exports.createChatMassAge = async (id, friendId, message, type) => {
         code: 200,
         data: newMessage
     }
+}
+
+exports.readChatMassage = async (id, friendId) => {
+    friendId = Number(friendId)
+    console.log(id, friendId)
+    let readMassage = await db.Chatmassage.updateMany({
+        where: { userId: id ,friendId},
+        data: { message_state: 1 }
+    })
+    return {
+        code: 200,
+        data: readMassage
+    }
+    // const newMessage = await db.Chatmassage.create({
+    //     data: {
+    //         userId: id,
+    //         friendId: friendId,
+    //         message,
+    //         type,
+    //         createAt: new Date(),
+    //         message_state: 0,
+    //         ConversationId: 1
+    //     }
+    // })
+    // return {
+    //     code: 200,
+    //     data: newMessage
+    // }
 }

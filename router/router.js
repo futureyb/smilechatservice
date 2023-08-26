@@ -130,6 +130,16 @@ Router.post("/sendChatMassAge",jwtCheck,async (req, res) => {
 
 })
 
+// 聊天记录变成已读
+Router.post("/readChatMassage",jwtCheck,async (req, res) => {
+    let jwtInfo = req.jwtInfo
+    let {friendId} = req.body
+    if(jwtInfo){
+        let {_id} = jwtInfo
+        let response_data = await dbserver.readChatMassage(_id,friendId)
+        res.send(response_data)
+    }
 
+})
 
 module.exports = Router

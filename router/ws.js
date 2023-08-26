@@ -30,10 +30,15 @@ router.ws('/socketTest', async function (ws, req) {
         //判断是否为心跳
         // if(msg === 'heartbeat') return 
         if (msg === 'heartbeat') return
-        let { friendId, message, type } = JSON.parse(msg)
+        msg = JSON.parse(msg)
+        let { friendId, message, type } = msg 
         dbserver.createChatMassAge(_id, friendId, message, type)
         if (clients[friendId]) {
-            clients[friendId].send(msg)
+            console.log()
+            
+            msg.userId = _id
+
+            clients[friendId].send( JSON.stringify(msg))
         }
     })
     ws.on('close', () => {
