@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const db = require("../config/db")
 const { jwtSign } = require('../utils/token')
 const { formatDate } = require('../utils/utils')
 exports.login = async (
@@ -33,7 +33,6 @@ exports.login = async (
 };
 
 exports.getUserInfo = async (id) => {
-    console.log(id)
     const user_login = await db.userinfo.findUnique({
         where: {
             id
@@ -55,25 +54,22 @@ exports.getUserFriends = async (id, friend_id) => {
             state: 0
         }
     });
+    //获取好友的id
     const friendIds = user_relation.map(item => item.friendId)
+    //查询好友的详细信息
     const friends = await db.userinfo.findMany({
         where: { id: { in: friendIds } },
 
     })
-
-
     //获取与好友的未读条数
     const updatedFriendsList = await Promise.all(
-        
         friends.map(async friend => {
-            console.log("好友id",friend.id)
             const unreadMessageCount = await db.chatmassage.count({
                 where: {
                     userId: friend.id,
                     message_state: 0
                 }
             });
-
             // 在现有好友对象的基础上添加未读消息数量属性
             return {
                 ...friend,
@@ -81,10 +77,6 @@ exports.getUserFriends = async (id, friend_id) => {
             };
         })
     );
-
-
-    console.log("好友", updatedFriendsList)
-    // console.log("好友111", friends)
 
     return {
         code: 200,
@@ -117,8 +109,6 @@ exports.getUserFriendsChatMsg = async (id, friendId) => {
             item.createAt = formatDate("yyyy-MM-dd hh:mm:ss", item.createAt)
         })
     }
-
-    // console.log(chat_massage)
     return {
         code: 200,
         data: chat_massage
@@ -147,7 +137,7 @@ exports.createChatMassAge = async (id, friendId, message, type) => {
 exports.readChatMassage = async (id, friendId) => {
     friendId = Number(friendId)
     let readMassage = await db.Chatmassage.updateMany({
-        where: { userId: friendId, friendId:id },
+        where: { userId: friendId, friendId: id },
         data: { message_state: 1 }
     })
     return {
