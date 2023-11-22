@@ -1,6 +1,11 @@
 const db = require("../config/db")
 const { jwtSign } = require('../utils/token')
 const { formatDate } = require('../utils/utils')
+
+exports.sign = async ()=>{
+    
+}
+
 exports.login = async (
     account, password
 ) => {
@@ -117,7 +122,7 @@ exports.getUserFriendsChatMsg = async (id, friendId) => {
 
 //创建聊天记录
 exports.createChatMassAge = async (id, friendId, message, type) => {
-    const newMessage = await db.Chatmassage.create({
+    const newMessage = await db.chatmassage.create({
         data: {
             userId: id,
             friendId: friendId,
@@ -125,7 +130,6 @@ exports.createChatMassAge = async (id, friendId, message, type) => {
             type,
             createAt: new Date(),
             message_state: 0,
-            ConversationId: 1
         }
     })
     return {
@@ -136,7 +140,7 @@ exports.createChatMassAge = async (id, friendId, message, type) => {
 
 exports.readChatMassage = async (id, friendId) => {
     friendId = Number(friendId)
-    let readMassage = await db.Chatmassage.updateMany({
+    let readMassage = await db.chatmassage.updateMany({
         where: { userId: friendId, friendId: id },
         data: { message_state: 1 }
     })

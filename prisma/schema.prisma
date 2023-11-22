@@ -1,69 +1,66 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-// 好友关系表
 model relation {
-    id       Int      @id @default(autoincrement()) @map("_id")
-    userId   Int //用户id
-    friendId Int //好友id
-    applyId  Int //应用id
-    createAt DateTime //成为好友的时间
-    state    Int //状态(0已成为好友，1为申请中，2为已拒绝)
-    userInfo userinfo @relation(fields: [userId], references: [id])
-    @@index([userId], map: "relation_userId_fkey")
-    @@map("relation")
+  id       Int      @id @default(autoincrement()) @map("_id")
+  userId   Int
+  friendId Int
+  applyId  Int
+  createAt DateTime
+  state    Int
+  userInfo userinfo @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "relation_userId_fkey")
+  @@map("relation")
 }
 
 model userinfo {
-    id           Int            @id @default(autoincrement()) @map("_id")
-    nickName     String         @default("宝子")
-    gender       Int            @default(0)
-    createAt     DateTime
-    email        String         @default("")
-    birthday     DateTime
-    phone        String         @default("")
-    signature    String         @default("")
-    header       String         @default("")
-    userId       relation[]
-    userlogin    userlogin[]
-    chatmassage  Chatmassage[]
-    Conversation Conversation[]
+  id           Int            @id @default(autoincrement()) @map("_id")
+  nickName     String         @default("宝子")
+  gender       Int            @default(0)
+  createAt     DateTime
+  email        String         @default("")
+  birthday     DateTime
+  phone        String         @default("")
+  signature    String         @default("")
+  header       String         @default("https://img0.baidu.com/it/u=3002413858,2200807329&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1700758800&t=7e4944fcd5004a41827a60fbcac95bfd")
+  chatmassage  chatmassage[]
+  userId       relation[]
+  userlogin    userlogin[]
 }
 
 model userlogin {
-    id         Int       @id @default(autoincrement()) @map("_id")
-    account    String    @unique
-    password   String
-    userInfoId Int?
-    userinfo   userinfo? @relation(fields: [userInfoId], references: [id], map: "userLogin_userInfoId_fkey")
+  id         Int       @id @default(autoincrement()) @map("_id")
+  account    String    @unique
+  password   String
+  userInfoId Int?
+  userinfo   userinfo? @relation(fields: [userInfoId], references: [id], map: "userLogin_userInfoId_fkey")
 
-    @@index([userInfoId], map: "userLogin_userInfoId_fkey")
-}
-//会话id
-model Conversation {
-    id        Int        @id @default(autoincrement())
-    createdAt DateTime   @default(now())
-    updatedAt DateTime   @updatedAt
-    user_id   userinfo[]
-    Chatmassage Chatmassage[]
 }
 
-// 一对一消息表
-model Chatmassage {
-    id            Int      @id @default(autoincrement()) @map("_id")
-    userId        Int //用户id
-    friendId      Int //好友id
-    message       String //消息
-    type          String //消息类型
-    createAt      DateTime //时间
-    message_state Int //消息状态 (0已读，1未读)
-    ConversationId Int
-    Conversation Conversation @relation(fields: [ConversationId], references: [id])
-    userinfo userinfo @relation(fields: [userId], references: [id])
+model chatmassage {
+  id             Int          @id @default(autoincrement()) @map("_id")
+  userId         Int          //消息的发送方
+  friendId       Int          //消息的接收方
+  message        String       //消息的内容
+  type           String       //消息的类型  
+  createAt       DateTime     //创建的时间
+  message_state  Int          //是否已读
+  userinfo       userinfo     @relation(fields: [userId], references: [id], map: "Chatmassage_userId_fkey")
+
+}
+
+
+//号码池
+model numberPool {
+    id  Int      @id @default(autoincrement()) @map("_id")
+    code String   
+    isPretty  Int @default(0)
+    signIn    Int @default(0)
 }
