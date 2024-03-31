@@ -14,4 +14,4 @@ $ prisma migrate dev
 $ prisma db pull
 
 将 Prisma 模型状态推送到数据库
-$ prisma db push
+$ npx prisma db push

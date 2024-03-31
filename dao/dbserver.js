@@ -83,6 +83,8 @@ exports.getUserFriends = async (id, friend_id) => {
         })
     );
 
+    console.log("好友条数",updatedFriendsList)
+
     return {
         code: 200,
         data: updatedFriendsList
@@ -148,4 +150,13 @@ exports.readChatMassage = async (id, friendId) => {
         code: 200,
         data: readMassage
     }
+}
+
+//搜索好友
+exports.searchFriend = async (id,searchId)=>{
+    searchId = Number(searchId)
+    let res = db.userlogin.findMany({
+        where:{account:searchId}
+    })
+    console.log(res)
 }

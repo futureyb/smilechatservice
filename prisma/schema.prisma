@@ -29,7 +29,7 @@ model userinfo {
   birthday     DateTime
   phone        String         @default("")
   signature    String         @default("")
-  header       String         @default("https://img0.baidu.com/it/u=3002413858,2200807329&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1700758800&t=7e4944fcd5004a41827a60fbcac95bfd")
+  header       String   @db.Text    
   chatmassage  chatmassage[]
   userId       relation[]
   userlogin    userlogin[]
@@ -48,7 +48,7 @@ model chatmassage {
   id             Int          @id @default(autoincrement()) @map("_id")
   userId         Int          //消息的发送方
   friendId       Int          //消息的接收方
-  message        String       //消息的内容
+  message        String @db.Text()       //消息的内容
   type           String       //消息的类型  
   createAt       DateTime     //创建的时间
   message_state  Int          //是否已读
